@@ -9,6 +9,12 @@ class ShopListRepositoryImpl : ShopListRepository {
 
     private var autoIncrementId = 0
 
+    init {
+        for (i in 0..10){
+            addShopItem(ShopItem(name = "item $i", count = i, isActive = true))
+        }
+    }
+
     override fun addShopItem(shopItem: ShopItem) {
         if (shopItem.id == -1) {
             shopItem.id = autoIncrementId++
