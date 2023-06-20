@@ -34,4 +34,10 @@ class MainViewModel: ViewModel() {
         getShopList()
     }
 
+    fun changActiveState(item: ShopItem){
+        val newItem = item.copy(isActive = !item.isActive)
+        editShopItemUseCase.editShopItem(newItem)
+        getShopList()
+    }
+
 }
