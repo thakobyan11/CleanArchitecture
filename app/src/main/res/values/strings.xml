@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Practics</string>
     <string name="my_first_project_on_github">My first Project on github</string>
+    <string name="name">name</string>
+    <string name="_1">1</string>
+    <string name="add">add</string>
 </resources>

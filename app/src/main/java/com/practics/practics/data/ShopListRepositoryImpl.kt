@@ -13,7 +13,7 @@ class ShopListRepositoryImpl : ShopListRepository {
     private var autoIncrementId = 0
 
     init {
-        for (i in 0..10){
+        for (i in 0..30){
             addShopItem(ShopItem(name = "item $i", count = i, isActive = true))
         }
     }
