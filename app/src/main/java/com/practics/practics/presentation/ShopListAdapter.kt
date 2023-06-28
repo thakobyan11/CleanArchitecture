@@ -1,58 +1,52 @@
 package com.practics.practics.presentation
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.practics.practics.R
 import com.practics.practics.domain.ShopItem
 
-class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
+class ShopListAdapter : ListAdapter<ShopItem,ShopItemViewHolder>(ShopItemDiffCallBack()) {
 
-
-    var shopList = listOf<ShopItem>()
-    var count = 0
+    var shopItemLongClickListener: ((ShopItem) -> Unit)? = null
+    var shopItemClickListener: ((ShopItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
-        Log.d("TAG","onCreateViewHolder ${++count}")
-        return if (viewType == VIEW_TYPE_IS_ACTIVE){
+        return if (viewType == VIEW_TYPE_IS_ACTIVE) {
             ShopItemViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.shop_list_item,parent, false)
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.shop_list_item, parent, false)
             )
-        }else{
+        } else {
             ShopItemViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.shop_list_item_light,parent, false)
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.shop_list_item_light, parent, false)
             )
         }
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        holder.name.text = "${shopList[position].name} "
-        holder.count.text = shopList[position].count.toString()
+        val shopItem = getItem(position)
+        holder.name.text = "${shopItem.name} "
+        holder.count.text = getItem(position).count.toString()
         holder.view.setOnLongClickListener {
+            shopItemLongClickListener?.invoke(shopItem)
             true
+        }
+        holder.view.setOnClickListener {
+            shopItemClickListener?.invoke(shopItem)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (shopList[position].isActive){
+        return if (getItem(position).isActive) {
             VIEW_TYPE_IS_ACTIVE
-        }else{
+        } else {
             VIEW_TYPE_IS_NOT_ACTIVE
         }
     }
 
-    override fun getItemCount() = shopList.size
-
-    class ShopItemViewHolder (val view : View) :RecyclerView.ViewHolder(view) {
-        val name :TextView = view.findViewById(R.id.name)
-        val count :TextView = view.findViewById(R.id.count)
-    }
-
-    companion object{
+    companion object {
         const val VIEW_TYPE_IS_ACTIVE = 1
         const val VIEW_TYPE_IS_NOT_ACTIVE = 2
         const val MAX_POOL_COUNT = 15
