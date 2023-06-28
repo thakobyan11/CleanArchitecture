@@ -9,7 +9,7 @@ import kotlin.random.Random
 class ShopListRepositoryImpl : ShopListRepository {
 
     private val shopListLD = MutableLiveData<List<ShopItem>>()
-    private val shopList = hashSetOf<ShopItem>({p1,p2 -> })
+    private val shopList = sortedSetOf<ShopItem>({p1,p2 -> p1.id.compareTo(p2.id)})
 
     private var autoIncrementId = 0
 
