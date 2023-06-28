@@ -24,4 +24,5 @@ class MainViewModel: ViewModel() {
         val newItem = item.copy(isActive = !item.isActive)
         editShopItemUseCase.editShopItem(newItem)
     }
+
 }
