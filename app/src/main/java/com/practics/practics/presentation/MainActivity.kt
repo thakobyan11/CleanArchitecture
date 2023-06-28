@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practics.practics.R
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var linearLayout: LinearLayout
     private lateinit var shopListAdapter: ShopListAdapter
 
     private lateinit var vm: MainViewModel
@@ -19,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setUpAdapter()
         vm = ViewModelProvider(this)[MainViewModel::class.java]
-        linearLayout = findViewById(R.id.linear_layout)
 
         vm.listShop.observe(this) {
             shopListAdapter.submitList(it)
