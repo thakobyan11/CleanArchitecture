@@ -43,7 +43,7 @@ class ShopListRepositoryImpl : ShopListRepository {
             ?: throw RuntimeException("Element with id $shopItemId not found")
     }
 
-    override fun getShopList(): LiveData<List<ShopItem>> = shopListLD
+    override fun getShopList() = shopListLD
 
     private fun updateList(){
         shopListLD.value = shopList.toList()
