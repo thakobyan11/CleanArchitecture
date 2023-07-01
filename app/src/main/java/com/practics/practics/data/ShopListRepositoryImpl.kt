@@ -14,13 +14,13 @@ class ShopListRepositoryImpl : ShopListRepository {
     private var autoIncrementId = 0
 
     init {
-        for (i in 0..50){
+        for (i in 0..10){
             addShopItem(ShopItem(name = "item $i", count = i, isActive = Random.nextBoolean()))
         }
     }
 
     override fun addShopItem(shopItem: ShopItem) {
-        if (shopItem.id == -1) {
+        if (shopItem.id == ShopItem.UNDEFINED_ID) {
             shopItem.id = autoIncrementId++
         }
         shopList.add(shopItem)
@@ -32,9 +32,10 @@ class ShopListRepositoryImpl : ShopListRepository {
         updateList()
     }
 
-    // will be changed
+
     override fun editShopItem(shopItem: ShopItem) {
-        deleteShopItem(getShopItemById(shopItem.id))
+        val oldElement = getShopItemById(shopItem.id)
+        shopList.remove(oldElement)
         addShopItem(shopItem)
     }
 
