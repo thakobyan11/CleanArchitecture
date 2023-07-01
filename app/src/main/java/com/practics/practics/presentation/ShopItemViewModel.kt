@@ -29,27 +29,26 @@ class ShopItemViewModel : ViewModel() {
      val shouldCloseScreen : LiveData<Unit>
          get() = _shouldCloseScreen
 
-    fun addShopItem(inputName : String? , inputCount : String?){
+    fun editShopItem(inputName : String? , inputCount : String?){
         val name = parseName(inputName)
         val count = parseCount(inputCount)
         val fieldsValid = validateInput(name,count)
         if (fieldsValid){
             _shopItem.value?.let {
                 val shopItem = it.copy(name = name, count = count)
-                addShopItemUseCase.addShopItem(shopItem)
+                editShopItemUseCase.editShopItem(shopItem)
                 finishWork()
             }
-
         }
     }
 
-    fun editShopItem(inputName : String? , inputCount : String?){
+    fun addShopItem(inputName : String? , inputCount : String?){
         val name = parseName(inputName)
         val count = parseCount(inputCount)
         val fieldsValid = validateInput(name,count)
         if (fieldsValid){
             val shopItem = ShopItem(name = name, count = count, isActive = true)
-            editShopItemUseCase.editShopItem(shopItem)
+            addShopItemUseCase.addShopItem(shopItem)
             finishWork()
         }
     }
@@ -84,12 +83,12 @@ class ShopItemViewModel : ViewModel() {
         return result
     }
 
-    private fun resetErrorName(){
-        _errorInputName.value = false
+    fun resetErrorCount(){
+        _errorInputCount.value = false
     }
 
-    private fun resetErrorCount(){
-        _errorInputCount.value = false
+    fun resetErrorName(){
+        _errorInputName.value = false
     }
 
     private fun finishWork(){

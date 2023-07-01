@@ -21,19 +21,47 @@ class ShopItemActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShopItemBinding
     private lateinit var vm: ShopItemViewModel
     private var shopItemId = ShopItem.UNDEFINED_ID
-    private var screenMode = ""
+    private var screenMode = MODE_UNKNOWN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        parseIntent()
+        //parseIntent()
         vm = ViewModelProvider(this)[ShopItemViewModel::class.java]
+        /*lunchMode()
+        textChangeListener()
+        observeViewModel()*/
+    }
+
+    /*private fun observeViewModel(){
+        vm.errorInputName.observe(this){
+            val massage = if (it){
+                resources.getString(R.string.incorrect_name)
+            }else{
+                null
+            }
+            binding.tilName.error = massage
+        }
+        vm.errorInputCount.observe(this){
+            val massage = if (it){
+                resources.getString(R.string.incorrect_count)
+            }else{
+                null
+            }
+            binding.tilCount.error = massage
+        }
+
+        vm.shouldCloseScreen.observe(this){
+            finish()
+        }
+    }
+
+    private fun lunchMode(){
         when (screenMode) {
             EXTRA_MODE_VALUE_EDIT -> lunchEditMode()
             EXTRA_MODE_VALUE_ADD -> lunchAddMode()
         }
-
     }
 
     private fun lunchEditMode() {
@@ -54,53 +82,57 @@ class ShopItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun showError(til: TextInputLayout) {
-        til.error = resources.getString(R.string.incorrect_name)
-    }
 
-    private fun hideError(edt: TextInputEditText) {
-        edt.error = null
-    }
-
-    private fun textChangeListener(edt:TextInputEditText){
-        edt.addTextChangedListener(object : TextWatcher{
+    private fun textChangeListener(){
+        binding.edtName.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                hideError(edt)
+                vm.resetErrorName()
             }
 
             override fun afterTextChanged(s: Editable?) {
+            }
+        })
 
+        binding.edtCount.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                vm.resetErrorCount()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
         })
     }
 
     private fun parseIntent() {
-        val intentMode = intent.getStringExtra(EXTRA_MODE)
-        if (!intent.hasExtra(EXTRA_MODE) ||
-            intentMode != EXTRA_MODE_VALUE_EDIT ||
-            intentMode != EXTRA_MODE_VALUE_ADD
-        ) {
+        if (!intent.hasExtra(EXTRA_MODE)) {
             throw RuntimeException("Param screen mode undefined")
+        }
+        val intentMode = intent.getStringExtra(EXTRA_MODE)
+        if (intentMode != EXTRA_MODE_VALUE_EDIT &&
+            intentMode != EXTRA_MODE_VALUE_ADD){
+            throw RuntimeException("Param screen mode undefined $intentMode")
         }
         screenMode = intentMode
         if (intentMode == EXTRA_MODE_VALUE_EDIT) {
             if (!intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
                 throw java.lang.RuntimeException("undefined item id ")
             }
-            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
+            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID )
         }
-    }
+    }*/
 
     companion object {
         private const val EXTRA_MODE = "extra_mode"
         private const val EXTRA_MODE_VALUE_ADD = "extra_value_add"
         private const val EXTRA_MODE_VALUE_EDIT = "extra_value_edit"
         private const val EXTRA_SHOP_ITEM_ID = "extra_shop_item_id"
+        private const val MODE_UNKNOWN = ""
 
         fun newIntentForEdit(context: Context, shopItemId: Int): Intent {
             val intent = Intent(context, ShopItemActivity::class.java)
