@@ -4,4 +4,6 @@
     <string name="name">name</string>
     <string name="_1">1</string>
     <string name="add">add</string>
+    <string name="edit">Edit</string>
+    <string name="incorrect_name">Incorrect name</string>
 </resources>
