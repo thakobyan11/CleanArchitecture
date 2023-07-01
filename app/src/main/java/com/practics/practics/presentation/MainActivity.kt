@@ -2,11 +2,10 @@ package com.practics.practics.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.practics.practics.R
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUpAdapter()
+        addShopItem()
         vm = ViewModelProvider(this)[MainViewModel::class.java]
 
         vm.listShop.observe(this) {
@@ -38,10 +38,14 @@ class MainActivity : AppCompatActivity() {
         )
         setUpLongClick()
         setUpOnClick()
+        setUpSwipeDelete(rcv)
+    }
+
+    private fun setUpSwipeDelete(rcv: RecyclerView) {
         val callBack = object :
             ItemTouchHelper.SimpleCallback(
                 0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-            ){
+            ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -61,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpOnClick() {
         shopListAdapter.shopItemClickListener = {
-            Log.d("TAG", "CLICK")
+            startActivity(ShopItemActivity.newIntentForEdit(this,it.id))
         }
     }
 
@@ -70,4 +74,13 @@ class MainActivity : AppCompatActivity() {
             vm.changeActiveState(it)
         }
     }
+
+    private fun addShopItem(){
+        findViewById<FloatingActionButton>(R.id.fab).let{
+            it.setOnClickListener {
+                startActivity(ShopItemActivity.newIntentForAdd(this))
+            }
+        }
+    }
+
 }

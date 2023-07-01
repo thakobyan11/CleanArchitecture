@@ -7,7 +7,7 @@ import com.practics.practics.data.ShopListRepositoryImpl
 import com.practics.practics.domain.*
 import java.lang.Exception
 
-class EditShopItemViewModel : ViewModel() {
+class ShopItemViewModel : ViewModel() {
     private val repository = ShopListRepositoryImpl()
     private val addShopItemUseCase = AddShopItemUseCase(repository)
     private val editShopItemUseCase = EditShopItemUseCase(repository)
