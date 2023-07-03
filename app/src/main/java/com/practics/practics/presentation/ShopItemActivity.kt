@@ -19,94 +19,28 @@ import com.practics.practics.domain.ShopItem
 class ShopItemActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityShopItemBinding
-    private lateinit var vm: ShopItemViewModel
-    private var shopItemId = ShopItem.UNDEFINED_ID
-    private var screenMode = MODE_UNKNOWN
+
+    private var shopItemId:Int = ShopItem.UNDEFINED_ID
+    private var screenMode:String = MODE_UNKNOWN
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //parseIntent()
-        vm = ViewModelProvider(this)[ShopItemViewModel::class.java]
-        /*lunchMode()
-        textChangeListener()
-        observeViewModel()*/
-    }
-
-    /*private fun observeViewModel(){
-        vm.errorInputName.observe(this){
-            val massage = if (it){
-                resources.getString(R.string.incorrect_name)
-            }else{
-                null
-            }
-            binding.tilName.error = massage
-        }
-        vm.errorInputCount.observe(this){
-            val massage = if (it){
-                resources.getString(R.string.incorrect_count)
-            }else{
-                null
-            }
-            binding.tilCount.error = massage
-        }
-
-        vm.shouldCloseScreen.observe(this){
-            finish()
-        }
+        parseIntent()
+        lunchMode()
     }
 
     private fun lunchMode(){
-        when (screenMode) {
-            EXTRA_MODE_VALUE_EDIT -> lunchEditMode()
-            EXTRA_MODE_VALUE_ADD -> lunchAddMode()
+        val fragment = when (screenMode) {
+            EXTRA_MODE_VALUE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
+            EXTRA_MODE_VALUE_ADD -> ShopItemFragment.newInstanceAddItem()
+            else -> throw java.lang.RuntimeException("Unknown screen mode $screenMode")
         }
-    }
-
-    private fun lunchEditMode() {
-        binding.btnSave.text = resources.getString(R.string.edit)
-        vm.getShopItem(shopItemId)
-        vm.shopItem.observe(this){
-            binding.edtName.setText(it.name)
-            binding.edtCount.setText(it.count.toString())
-        }
-        binding.btnSave.setOnClickListener {
-            vm.editShopItem(binding.edtName.text?.toString(), binding.edtCount.text?.toString())
-        }
-    }
-
-    private fun lunchAddMode() {
-        binding.btnSave.setOnClickListener {
-            vm.addShopItem(binding.edtName.text?.toString(), binding.edtCount.text?.toString())
-        }
-    }
-
-
-    private fun textChangeListener(){
-        binding.edtName.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                vm.resetErrorName()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.edtCount.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                vm.resetErrorCount()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        supportFragmentManager.beginTransaction()
+            .add(R.id.frag_cont_view,fragment)
+            .commit()
     }
 
     private fun parseIntent() {
@@ -125,7 +59,7 @@ class ShopItemActivity : AppCompatActivity() {
             }
             shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID )
         }
-    }*/
+    }
 
     companion object {
         private const val EXTRA_MODE = "extra_mode"
