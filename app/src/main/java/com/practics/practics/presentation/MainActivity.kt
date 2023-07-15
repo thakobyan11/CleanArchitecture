@@ -1,20 +1,23 @@
 package com.practics.practics.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.practics.practics.R
+import com.practics.practics.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var shopListAdapter: ShopListAdapter
+    private lateinit var binding: ActivityMainBinding
 
     private lateinit var vm: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setUpAdapter()
         addShopItem()
         vm = ViewModelProvider(this)[MainViewModel::class.java]
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpAdapter() {
         shopListAdapter = ShopListAdapter()
-        val rcv: RecyclerView = findViewById(R.id.rcv)
+        val rcv: RecyclerView = binding.rcv
         rcv.adapter = shopListAdapter
         rcv.recycledViewPool.setMaxRecycledViews(
             ShopListAdapter.VIEW_TYPE_IS_ACTIVE,

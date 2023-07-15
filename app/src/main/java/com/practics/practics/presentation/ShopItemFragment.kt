@@ -1,7 +1,5 @@
 package com.practics.practics.presentation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +14,10 @@ import com.practics.practics.domain.ShopItem
 
 class ShopItemFragment : Fragment() {
 
-    private lateinit var binding: FragmentShopItemBinding
+    private var _binding: FragmentShopItemBinding? = null
+    private val binding :FragmentShopItemBinding
+        get() = _binding ?: throw RuntimeException("FragmentShopItemBinding == null")
+
     private lateinit var vm: ShopItemViewModel
 
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
@@ -34,7 +35,7 @@ class ShopItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentShopItemBinding.inflate(layoutInflater)
+        _binding = FragmentShopItemBinding.inflate(layoutInflater)
         return binding.root
     }
 
