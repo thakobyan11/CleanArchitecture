@@ -7,7 +7,7 @@ data class ShopItem(
     val isActive:Boolean
 ){
     companion object{
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID = 0
     }
 }
 

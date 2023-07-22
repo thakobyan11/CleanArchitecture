@@ -1,14 +1,17 @@
 package com.practics.practics.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.practics.practics.data.ShopListRepositoryImpl
-import com.practics.practics.domain.*
-import java.lang.Exception
+import com.practics.practics.domain.AddShopItemUseCase
+import com.practics.practics.domain.EditShopItemUseCase
+import com.practics.practics.domain.GetShopItemUseCase
+import com.practics.practics.domain.ShopItem
 
-class ShopItemViewModel : ViewModel() {
-    private val repository = ShopListRepositoryImpl()
+class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository = ShopListRepositoryImpl(application)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
     private val editShopItemUseCase = EditShopItemUseCase(repository)
     private val getShopItemUseCase = GetShopItemUseCase(repository)

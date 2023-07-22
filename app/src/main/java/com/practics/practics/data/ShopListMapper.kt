@@ -18,7 +18,7 @@ class ShopListMapper {
         isActive = shopItemDB.isActive
     )
 
-    fun mapListDbModelToListEntity(list:List<ShopItemDB>) = list.forEach {
+    fun mapListDbModelToListEntity(list:List<ShopItemDB>) = list.map {
         mapDbModelToEntity(it)
     }
 }

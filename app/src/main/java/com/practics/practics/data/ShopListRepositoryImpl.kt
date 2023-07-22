@@ -2,17 +2,16 @@ package com.practics.practics.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.practics.practics.domain.ShopItem
 import com.practics.practics.domain.ShopListRepository
-import kotlin.random.Random
 
 class ShopListRepositoryImpl (
     application: Application
         ) : ShopListRepository {
 
-    val daoShopItem = ShopDatabase.getInstance(application).getShopListDao()
-    val mapper = ShopListMapper()
+    private val daoShopItem = ShopDatabase.getInstance(application).getShopListDao()
+    private val mapper = ShopListMapper()
 
     override fun addShopItem(shopItem: ShopItem) {
         daoShopItem.addShopItem(mapper.mapEntityToDbModel(shopItem))
@@ -32,6 +31,9 @@ class ShopListRepositoryImpl (
     }
 
 
-    override fun getShopList() : LiveData<List<ShopItem>> = daoShopItem.getShopList()
-
+    override fun getShopList() : LiveData<List<ShopItem>> = Transformations.map(
+        daoShopItem.getShopList()
+    ){
+        mapper.mapListDbModelToListEntity(it)
+    }
 }
