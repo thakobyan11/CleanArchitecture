@@ -6,34 +6,34 @@ import androidx.lifecycle.Transformations
 import com.practics.practics.domain.ShopItem
 import com.practics.practics.domain.ShopListRepository
 
-class ShopListRepositoryImpl (
+class ShopListRepositoryImpl(
     application: Application
-        ) : ShopListRepository {
+) : ShopListRepository {
 
     private val daoShopItem = ShopDatabase.getInstance(application).getShopListDao()
     private val mapper = ShopListMapper()
 
-    override fun addShopItem(shopItem: ShopItem) {
+    override suspend fun addShopItem(shopItem: ShopItem) {
         daoShopItem.addShopItem(mapper.mapEntityToDbModel(shopItem))
     }
 
-    override fun deleteShopItem(shopItem: ShopItem) {
+    override suspend fun deleteShopItem(shopItem: ShopItem) {
         daoShopItem.deleteShopItem(shopItem.id)
     }
 
 
-    override fun editShopItem(shopItem: ShopItem) {
+    override suspend fun editShopItem(shopItem: ShopItem) {
         daoShopItem.addShopItem(mapper.mapEntityToDbModel(shopItem))
     }
 
-    override fun getShopItemById(shopItemId: Int): ShopItem {
+    override suspend fun getShopItemById(shopItemId: Int): ShopItem {
         return mapper.mapDbModelToEntity(daoShopItem.getShopItemById(shopItemId))
     }
 
 
-    override fun getShopList() : LiveData<List<ShopItem>> = Transformations.map(
+    override fun getShopList(): LiveData<List<ShopItem>> = Transformations.map(
         daoShopItem.getShopList()
-    ){
+    ) {
         mapper.mapListDbModelToListEntity(it)
     }
 }
