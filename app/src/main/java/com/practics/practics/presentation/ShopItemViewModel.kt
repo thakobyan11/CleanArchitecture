@@ -4,11 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.practics.practics.data.ShopListRepositoryImpl
 import com.practics.practics.domain.AddShopItemUseCase
 import com.practics.practics.domain.EditShopItemUseCase
 import com.practics.practics.domain.GetShopItemUseCase
 import com.practics.practics.domain.ShopItem
+import kotlinx.coroutines.launch
 
 class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = ShopListRepositoryImpl(application)
@@ -39,7 +41,9 @@ class ShopItemViewModel(application: Application) : AndroidViewModel(application
         if (fieldsValid){
             _shopItem.value?.let {
                 val shopItem = it.copy(name = name, count = count)
-                editShopItemUseCase.editShopItem(shopItem)
+                viewModelScope.launch{
+                    editShopItemUseCase.editShopItem(shopItem)
+                }
                 finishWork()
             }
         }
@@ -51,14 +55,18 @@ class ShopItemViewModel(application: Application) : AndroidViewModel(application
         val fieldsValid = validateInput(name,count)
         if (fieldsValid){
             val shopItem = ShopItem(name = name, count = count, isActive = true)
-            addShopItemUseCase.addShopItem(shopItem)
+            viewModelScope.launch {
+                addShopItemUseCase.addShopItem(shopItem)
+            }
             finishWork()
         }
     }
 
     fun getShopItem(shopItemId: Int){
-        val item = getShopItemUseCase.getShopItem(shopItemId)
-        _shopItem.value = item
+        viewModelScope.launch {
+            val item = getShopItemUseCase.getShopItem(shopItemId)
+            _shopItem.value = item
+        }
     }
 
     private fun parseName(inputName : String?):String{

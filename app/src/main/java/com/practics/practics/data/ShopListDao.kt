@@ -13,11 +13,11 @@ interface ShopListDao {
     fun getShopList():LiveData<List<ShopItemDB>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addShopItem(shopItemDB: ShopItemDB)
+    suspend fun addShopItem(shopItemDB: ShopItemDB)
 
-    @Query("DELETE FROM shop_item WHERE id=:shopItemID")
-    fun deleteShopItem(shopItemID:Int)
+    @Query("DELETE FROM shop_item WHERE id=:shopItem")
+    suspend fun deleteShopItem(shopItem:Int)
 
     @Query("SELECT * FROM shop_item WHERE id=:shopItemID LIMIT 1")
-    fun getShopItemById(shopItemID: Int):ShopItemDB
+    suspend fun getShopItemById(shopItemID: Int):ShopItemDB
 }

@@ -2,11 +2,13 @@ package com.practics.practics.presentation
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.practics.practics.data.ShopListRepositoryImpl
 import com.practics.practics.domain.DeleteShopItemUseCase
 import com.practics.practics.domain.EditShopItemUseCase
 import com.practics.practics.domain.GetShopListUseCase
 import com.practics.practics.domain.ShopItem
+import kotlinx.coroutines.launch
 
 class MainViewModel (application: Application): AndroidViewModel(application) {
 
@@ -20,11 +22,15 @@ class MainViewModel (application: Application): AndroidViewModel(application) {
 
 
     fun deleteShopItem(item: ShopItem){
-        deleteShopItemUseCase.deleteShopItem(item)
+        viewModelScope.launch {
+            deleteShopItemUseCase.deleteShopItem(item)
+        }
     }
 
     fun changeActiveState(item: ShopItem){
         val newItem = item.copy(isActive = !item.isActive)
+        viewModelScope.launch {
         editShopItemUseCase.editShopItem(newItem)
+        }
     }
 }
